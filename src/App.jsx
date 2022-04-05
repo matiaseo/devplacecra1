@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import React, { StrictMode, useEffect, useState } from 'react'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import './App.css'
 import { Characters } from './Characters'
+import { Login } from './Login'
 
-const withRequiredToken = Component => {
-  return class extends React.Component {
-    constructor () {
-      this.state = { token: null }
-    }
-    componentDidMount() {
-      const token = localStorage.getItem('userToken')
-      this.setState({token})
-      if(!token) {
-        setTimeout(() => window.history.push('/login'), 5000)
-      }
-    }
-    render() {
-      return this.state.token? <Component {...this.props} /> : 401
-    }
-  }
-}
-const PrivateRouteWithHOC = withRequiredToken(Route)
+// const withRequiredToken = Component => {
+//   return class extends React.Component {
+//     constructor () {
+//       this.state = { token: null }
+//     }
+//     componentDidMount() {
+//       const token = localStorage.getItem('userToken')
+//       this.setState({token})
+//       if(!token) {
+//         setTimeout(() => window.history.push('/login'), 5000)
+//       }
+//     }
+//     render() {
+//       return this.state.token? <Component {...this.props} /> : 401
+//     }
+//   }
+// }
+// const PrivateRouteWithHOC = withRequiredToken(Route)
 
 // const PrivateRoutePropagatingProps = props => {
 //   const [token, setToken] = useState(null)
@@ -37,44 +38,56 @@ const PrivateRouteWithHOC = withRequiredToken(Route)
 //   return token? <Route path="/characters/*" element={<Characters token={token} />} /> : 401
 // }
 
-const PrivateSection = ({ children }) => {
-  const [token, setToken] = useState(null)
+// const PrivateSection = ({ children }) => {
+//   const [token, setToken] = useState(null)
 
-  useEffect(() => {
-    const token = localStorage.getItem('userToken')
-    setToken(token)
-    if(!token) {
-      setTimeout(() => window.history.push('/login'), 5000)
-    }
-  }, [])
+//   useEffect(() => {
+//     const token = localStorage.getItem('userToken')
+//     setToken(token)
+//     if(!token) {
+//       setTimeout(() => window.history.push('/login'), 5000)
+//     }
+//   }, [])
 
-  return token? <Routes>{children}</Routes> : 401
-}
+//   return token? <Routes>{children}</Routes> : 401
+// }
 
 const useAuthentication = () => {
+  const [originalPath, setOriginalPath] = useState('/characters')
   const [token, setToken] = useState(null)
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     const token = localStorage.getItem('userToken')
-    if(!token) navigate('/login')
-    else setToken(token)
+    if(!token) {
+      setOriginalPath(location.pathname)
+      navigate('/login')
+    } else setToken(token)
   }, [])
 
-  return token
+  return [
+    token,
+    token => {
+      setToken(token)
+      localStorage.setItem('userToken', token)
+    },
+    originalPath
+  ]
 }
 
 export function App() {
-  const token = useAuthentication()
+  const [token, setToken, originalPath] = useAuthentication()
   return (
-    <>
+    <StrictMode>
       {/* <PrivateSection>
         <Route path="/characters/*" element={<Characters />} />
       </PrivateSection> */}
       <Routes>
         <Route path="/characters/*" element={token && <Characters />} />
-        <Route path="/login" element={<div>login</div>} />
+        <Route path="/login" element={<Login setToken={setToken} originalPath={originalPath} />} />
+        <Route path="*" element={404} />
       </Routes>
-    </>
+    </StrictMode>
   )
 }
