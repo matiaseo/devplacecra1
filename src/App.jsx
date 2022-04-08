@@ -4,6 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import { Characters } from './Characters'
 import { Login } from './Login'
+import { Products } from './Products'
 
 // const withRequiredToken = Component => {
 //   return class extends React.Component {
@@ -79,15 +80,14 @@ const useAuthentication = () => {
 export function App() {
   const [token, setToken, originalPath] = useAuthentication()
   return (
-    <StrictMode>
-      {/* <PrivateSection>
-        <Route path="/characters/*" element={<Characters />} />
-      </PrivateSection> */}
-      <Routes>
+    <Routes>
+        {/* <PrivateSection>
+          <Route path="/characters/*" element={<Characters />} />
+        </PrivateSection> */}
+        <Route path="/products/*" element={token && <Products />} />
         <Route path="/characters/*" element={token && <Characters />} />
         <Route path="/login" element={<Login setToken={setToken} originalPath={originalPath} />} />
         <Route path="*" element={404} />
       </Routes>
-    </StrictMode>
   )
 }

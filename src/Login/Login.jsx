@@ -23,7 +23,7 @@ export const Login = ({ setToken, originalPath }) => {
                 navigate(originalPath)
             }
         } catch (error) {
-            console.error('error', error)
+            console.log('error', error)
         }
         console.log('goes on')
     }

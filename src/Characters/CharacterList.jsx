@@ -4,7 +4,7 @@ import { CharacterCard } from './CharacterCard'
 import { Col, Container, Row } from 'react-bootstrap'
 
 import { useTextInput } from '../shared/customHooks'
-import { CharacterFilter } from './CharacterFilter'
+import { Filter } from '../shared/Filter'
 
 
 export const CharacterList = () => {
@@ -24,7 +24,7 @@ export const CharacterList = () => {
     <Container fluid>
         <Row>
             <Col>
-                <CharacterFilter filter={filter} setFilter={setFilter} />
+                <Filter filter={filter} setFilter={setFilter} placeholder="character name" />
             </Col>
         </Row>
         <Row>
