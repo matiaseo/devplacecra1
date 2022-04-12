@@ -10,15 +10,15 @@ export const CreateProduct = () => {
 
     const navigate = useNavigate()
     
-    const handleSubmit = async event => {
+    const getSubmitHandler = product => async event => {
         event.preventDefault()
         try {
-            const product = {
-                name,
-                price: +price,
-                stock: +stock,
-                category: +category
-            }
+            // const product = {
+            //     name,
+            //     price: +price,
+            //     stock: +stock,
+            //     category: +category
+            // }
             const token = localStorage.getItem('userToken')
             const response = await fetch('http://localhost:5000/products', {
                 method: 'post',
@@ -42,7 +42,12 @@ export const CreateProduct = () => {
         <Container>
             <Row>
                 <Col className="ml-3 mr-3">
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={getSubmitHandler({
+                            name,
+                            price: +price,
+                            stock: +stock,
+                            category: +category
+                        })}>
                         <Form.Label  className="mt-3">Name</Form.Label>
                         <Form.Control value={name} onChange={setName} type="text" placeholder="character name" />
                         <Form.Label  className="mt-3">Price</Form.Label>
