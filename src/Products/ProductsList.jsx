@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom'
 import { useTextInput } from '../shared/customHooks'
 import { Filter } from '../shared/Filter'
 import { ProductCard } from './ProductCard'
+import { useUserRole } from '../Login'
 
 export const ProductsList = () => {
     const [list, setList] = useState([])
     const [filter, setFilter] = useTextInput('')
-
+    const userRole = useUserRole()
+    const isAdmin = userRole === 'admin'
     const filteredList = filter.length > 3? list.filter(product => product.name.includes(filter)) : list
 
     useEffect(() => {
@@ -25,9 +27,11 @@ export const ProductsList = () => {
             <Col>
                 <Filter filter={filter} setFilter={setFilter} placeholder="product name" />
             </Col>
-            <Col>
-                <Link to={`/products/create`}><Button>Create new product</Button></Link>
-            </Col>
+            { isAdmin &&
+                <Col>
+                    <Link to={`/products/create`}><Button>Create new product</Button></Link>
+                </Col>
+            }
         </Row>
         <Row>
             {filteredList.map(

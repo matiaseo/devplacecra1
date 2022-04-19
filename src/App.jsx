@@ -3,7 +3,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import './App.css'
 import { Characters } from './Characters'
-import { Login } from './Login'
+import { Login, UserContextProvider } from './Login'
 import { Products } from './Products'
 
 // const withRequiredToken = Component => {
@@ -84,7 +84,7 @@ export function App() {
         {/* <PrivateSection>
           <Route path="/characters/*" element={<Characters />} />
         </PrivateSection> */}
-        <Route path="/products/*" element={token && <Products />} />
+        <Route path="/products/*" element={token && <UserContextProvider><Products /></UserContextProvider>} />
         <Route path="/characters/*" element={token && <Characters />} />
         <Route path="/login" element={<Login setToken={setToken} originalPath={originalPath} />} />
         <Route path="*" element={404} />
