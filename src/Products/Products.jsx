@@ -11,7 +11,7 @@ export const Products = () => {
     console.log(role)
 
     useEffect(() => {
-        setRole('user')
+        setRole('admin')
     }, [])
 
     return (

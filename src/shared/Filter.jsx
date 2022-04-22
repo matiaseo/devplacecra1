@@ -2,11 +2,11 @@ import { Form } from 'react-bootstrap'
 
 const preventSubmit =  event => event.preventDefault()
 
-export const Filter = ({ filter, setFilter, placeholder }) => {
+export const Filter = ({ inputRef, filter, setFilter, placeholder }) => {
     return (
         <Form onSubmit={preventSubmit}>
             <Form.Label>Filter</Form.Label>
-            <Form.Control onChange={setFilter} value={filter} type="text" placeholder={placeholder} />
+            <Form.Control ref={inputRef} onChange={setFilter} value={filter} type="text" placeholder={placeholder} />
         </Form>
     )
 }

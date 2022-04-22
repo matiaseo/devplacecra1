@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 import { CharacterCard } from './CharacterCard'
 import { Col, Container, Row } from 'react-bootstrap'
@@ -9,8 +9,9 @@ import { Filter } from '../shared/Filter'
 
 export const CharacterList = () => {
     const [list, setList] = useState([])
-
+    const [updateCount, setUpdateCount] = useState(0)
     const [filter, setFilter] = useTextInput('')
+    const filterElement = useRef()
 
     const filterByName = filter.length > 3? `?name=${filter}` : ''
 
@@ -18,14 +19,31 @@ export const CharacterList = () => {
         fetch(`https://rickandmortyapi.com/api/character${filterByName}`)
             .then(response => response.ok? response.json() : {})
             .then(({ results: characters }) => characters && setList(characters))
+        // console.log('running fetch')
+        // return () => console.log('cleanup fetch')
     }, [filterByName])
+
+    useEffect(() => {
+        const intervalId = setInterval(() => setUpdateCount(count => count + 1), 2000)
+        return () => {
+            console.log('cleaning up', intervalId)
+            clearInterval(intervalId)
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log(filterElement.current)
+        if(filterElement.current)
+            filterElement.current.focus()
+    }, [])
 
     return (
     <Container fluid>
         <Row>
             <Col>
-                <Filter filter={filter} setFilter={setFilter} placeholder="character name" />
+                <Filter inputRef={filterElement} filter={filter} setFilter={setFilter} placeholder="character name" />
             </Col>
+            {updateCount}
         </Row>
         <Row>
             {list.map(
