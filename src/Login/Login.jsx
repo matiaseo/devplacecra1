@@ -21,6 +21,8 @@ export const Login = ({ setToken, originalPath }) => {
                 const { token } = await response.json()
                 setToken(token)
                 navigate(originalPath)
+            } else {
+                throw await response.text()
             }
         } catch (error) {
             console.log('error', error)
@@ -30,6 +32,7 @@ export const Login = ({ setToken, originalPath }) => {
 
     return (
         <Container>
+            <Row><Col>Log in</Col></Row>
             <Row>
                 <Col className="ml-3 mr-3">
                     <Form onSubmit={handleSubmit}>
