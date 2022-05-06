@@ -13,7 +13,7 @@ export const UserContextProvider = ({ children }) => {
 }
 
 export const useUserRole = () => {
-    return useContext(UserContext).role
+    return useContext(UserContext)?.role
 }
 
 export const useUserContext = () => {

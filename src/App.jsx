@@ -53,6 +53,9 @@ import { Products } from './Products'
 //   return token? <Routes>{children}</Routes> : 401
 // }
 
+const getStorageItem = key => localStorage.getItem(key)
+const setStorageItem = (key, value) => localStorage.setItem(key, value)
+
 const useAuthentication = () => {
   const [originalPath, setOriginalPath] = useState('/characters')
   const [token, setToken] = useState(null)
@@ -60,7 +63,7 @@ const useAuthentication = () => {
   const location = useLocation()
 
   useEffect(() => {
-    const token = localStorage.getItem('userToken')
+    const token = getStorageItem('userToken')
     if(!token) {
       setOriginalPath(location.pathname)
       navigate('/login')
@@ -71,7 +74,7 @@ const useAuthentication = () => {
     token,
     token => {
       setToken(token)
-      localStorage.setItem('userToken', token)
+      setStorageItem('userToken', token)
     },
     originalPath
   ]

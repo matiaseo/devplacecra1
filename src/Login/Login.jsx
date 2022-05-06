@@ -4,7 +4,7 @@ import { useTextInput } from "../shared/customHooks"
 
 export const Login = ({ setToken, originalPath }) => {
     const [username, setUsername] = useTextInput('')
-    const [password, setPasssword] = useTextInput('')
+    const [password, setPassword] = useTextInput('')
     const navigate = useNavigate()
     
     const handleSubmit = async event => {
@@ -31,15 +31,15 @@ export const Login = ({ setToken, originalPath }) => {
     }
 
     return (
-        <Container>
+        <Container data-testid="login-page">
             <Row><Col>Log in</Col></Row>
             <Row>
                 <Col className="ml-3 mr-3">
                     <Form onSubmit={handleSubmit}>
                         <Form.Label  className="mt-3">User Name</Form.Label>
                         <Form.Control onChange={setUsername} value={username} type="text" placeholder="character name" />
-                        <Form.Label>Passsword</Form.Label>
-                        <Form.Control onChange={setPasssword} value={password} type="password" placeholder="****" />
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control onChange={setPassword} value={password} type="password" placeholder="****" />
                         <Form.Control className="mt-3" type="submit"/>
                     </Form>
                 </Col>
